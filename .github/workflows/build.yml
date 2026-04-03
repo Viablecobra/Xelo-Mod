@@ -12,14 +12,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Rust
-        run: rustup update stable
+        run: |
+          rustup toolchain install nightly
+          rustup default nightly
+
       - name: Install cross-compilation tools
         uses: taiki-e/setup-cross-toolchain-action@v1
         with:
           target: ${{ matrix.target }} 
+
       - name: build
-        run: cargo build --profile githubci
+        run: cargo +nightly build --profile githubci
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
